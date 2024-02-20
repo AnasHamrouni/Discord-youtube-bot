@@ -115,6 +115,7 @@ async def skip(ctx: commands.Context, *args):
      except KeyError: queue_length = 0
      if queue_length <= 0:
           await ctx.send('the bot isn\'t playing anything')
+          return
      if not await sense_checks(ctx):
           return
 
