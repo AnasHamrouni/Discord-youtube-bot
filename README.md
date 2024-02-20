@@ -1,39 +1,44 @@
-# YoutubeBot - a self-hosted Discord bot for playing YouTube videos
-## Commands
-- `.play {url or search}` - plays or queues a video, and joins VC if it's not already there.
-    - alternate: `.p`
-- `.skip {n}` - skips `n` videos. Without `n`, skips only once. `.skip all` will skip every song and leave the VC.
-    - alternate: `.s`
-- `.queue` - shows a list of titles queued for playback
-    - alternate: `.q`
+# YoutubeBot: Your Personal Discord Bot for YouTube Playback
 
-## Getting started
-Recently, some of the major Discord bots designed to play YouTube videos (Rythm and Groovy to name a few) have been taken down by Google for copyright infringment. This means that I can't just give you a bot to add to your server, but I can give you the code to run on your own bot, which you can add to your server. Don't worry, this is a pretty straightforward process.
+Welcome to the YoutubeBot repository! This Discord bot is designed to enhance your server with the ability to play YouTube videos directly in your voice channels. It's a perfect solution for shared music experiences or just adding a bit of fun to your server's voice chats. Let's dive into how you can get this bot up and running for your community.
 
-A word of warning before we start though: you'll need somewhere to host the bot. Something you can leave on - a Raspberry Pi connected to your home network, an AWS server, a home server, or something similar - would be ideal. A static IP is not required.
+## Features
+- **Play Command**: Use `.play {url or search term}` to play a specific video or search for one. If the bot isn't already in a voice channel (VC), it will join one.
+  - Alternate command: `.p`
+- **Skip Command**: Use `.skip {n}` to skip a specified number of videos in the queue. If no number is provided, it skips the current video. Use `.skip all` to clear the queue and leave the VC.
+  - Alternate command: `.s`
+- **Queue Command**: Use `.queue` to display the current list of videos queued for playback.
+  - Alternate command: `.q`
 
-### Step 1: Creating an empty bot
-1. First, head to Discord's [developer portal](https://discord.com/developers/applications).
-2. Sign in if it asks you to, then you should see a screen with a "New Application" button in the top right corner. Click it.
-3. Give your bot a name - I called mine "YoutubeBot", you can call yours whatever you want. This isn't super important, because you'll be giving it a username later.
-4. After you hit "Create", you should see some general info about your bot. You can edit this if you want - give it a name, profile picture, about me, etc - use the profile picture in this repo if you want, or make your own, or don't bother.
-5. Navigate to the "Bot" tab in the sidebar. From here you can give it a username - this is what it will show up as in your server.
-6. On this page activate the "Message Content Intent" toggle. This is so the bot can read the content of the commands. Make sure to save your changes!
+## Getting Started
 
-### Step 2: Adding it to your server
-1. Now that you have a bot, it's time to add it to your server. Go to the "OAuth2" page from the same sidebar.
-2. Under "URL generator" select the "bot" checkbox, then under "Bot Permissions" select "Administrator". The only reason it needs administrator privileges is to join private VCs if requested by someone in them. I promise the bot won't do anything spooky with these perms, and you can check the code for yourself if you want, but if you're okay with it not working in private VCs then you can choose "Send Messages", "Connect", and "Speak", which will allow it to join any VCs its role permits.
-3. Hit "Copy" next to the URL that got generated and paste it into your browser, then select your server from the dropdown and complete the captcha.
+In light of recent events where popular Discord music bots have been discontinued, YoutubeBot offers a self-hosted alternative that you can run on your own server. This guide will help you through the setup process, ensuring you have your own YouTube-playing bot in no time.
 
-### Step 3: Making it do stuff
-1. You now have a bot, and it's in your server, but it's not doing much. You'll want to do this bit on something that can be left on all the time, as I mentioned earlier.
-2. Download the code. You can do this by downloading the zip and unzipping it, or with a `git clone` command, or however you prefer to get GitHub content.
-3. Make sure you have Python 3.8 or later installed.
-4. Open up a console wherever you downloaded the code to (don't forget to unzip it if it's zipped), and run `pip install -r requirements.txt`
-5. Create a copy of the ".env_example" file named ".env"
-6. Head back to the "Bot" page. Click "Reset Token", then click "Copy". This will copy your bot's unique token so that the code can identify itself as the bot you've just created.
-7. Edit ".env" and replace "your-token-goes-here" with the token you just copied.
-8. Run `nohup ./youtubebot.py &` on Linux/Unix or `python youtube.py` on Windows (note that on Windows, if you close the console your bot will stop). For Linux/Unix: if you get an error along the lines of "permission denied" or "not executable", run `chmod +x youtubebot.py` to make it executable and try again.
-9. The bot is now running. To stop it, run `pkill -f youtubebot.py` on Linux/Unix or press `ctrl+c` while clicked into your console on Windows.
+### Prerequisites
 
-Congrats! You should now be able to use the bot by joining a VC and using the commands above. If not, let me know and I'll try to help as best I can.
+Before we start, please ensure you have a hosting solution for the bot, such as a Raspberry Pi, an AWS server, or a home server. A static IP is not necessary for this setup.
+
+### Step 1: Creating Your Bot
+
+1. Navigate to the [Discord Developer Portal](https://discord.com/developers/applications).
+2. Sign in and click on "New Application" in the top right.
+3. Name your application (e.g., "YoutubeBot").
+4. After creation, you can customize your bot's profile (name, picture, etc.) if desired.
+5. Go to the "Bot" tab, set a username for your bot, and enable the "Message Content Intent" to allow command reading.
+
+### Step 2: Adding Your Bot to a Server
+
+1. In the Developer Portal, go to the "OAuth2" section.
+2. Under "URL generator", select "bot", then choose "Administrator" under "Bot Permissions" for full functionality (or more restrictive permissions if you prefer).
+3. Copy the generated URL, paste it into your browser, select your server, and authorize the bot.
+
+### Step 3: Activating Your Bot
+
+1. Download the bot code from this repository.
+2. Ensure Python 3.8 or later is installed on your machine.
+3. Install the required dependencies by running `pip install -r requirements.txt` in your terminal.
+4. Duplicate the ".env_example" file and rename the copy to ".env".
+5. Obtain your bot's token from the Bot page on the Developer Portal and paste it into your ".env" file.
+6. Launch the bot using `nohup ./youtubebot.py &` on Linux/Unix or `python youtubebot.py` on Windows. Ensure the script is executable if you're on Linux/Unix.
+
+Congratulations! Your YoutubeBot should now be operational. Test it by joining a VC and using the commands. If you encounter any issues or have questions, feel free to reach out for support.
