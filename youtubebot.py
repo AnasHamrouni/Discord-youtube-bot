@@ -31,7 +31,7 @@ client_id  = os.getenv('SPOTIFY_CLIENT_ID')
 client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
 
 # Authenticate with Spotify using OAuth
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
+spoti_api = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                client_secret=client_secret,
                                                redirect_uri="localhost",
                                                scope= 'playlist-read-private'))
@@ -186,7 +186,7 @@ async def play(ctx: commands.Context, *args):
           playlist_uri = 'SPOTIFY_PLAYLIST_URI'
 
           # Fetch the playlist data
-          results = sp.playlist_tracks(playlist_uri)
+          results = spoti_api.playlist_tracks(playlist_uri)
 
           # Extract and print out track names and artists
           for idx, item in enumerate(results['items']):
