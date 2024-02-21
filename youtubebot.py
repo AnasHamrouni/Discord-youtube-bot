@@ -74,7 +74,7 @@ async def pop(ctx, *args):
         await ctx.send("Please provide a valid song number. Example: .pop 5")
 
 
-@bot.command(name='shuffle')
+@bot.command(name='shuffle', aliases=['sh'])
 async def shuffle(ctx):
     # Retrieve the queue for the current guild
     queue = queues.get(ctx.guild.id)
