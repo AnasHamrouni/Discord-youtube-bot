@@ -208,6 +208,7 @@ async def play(ctx: commands.Context, *args):
                     # you would handle each track.
                     await play(ctx, song_search_query)
                return
+
      else:
           if "list" in query:
                with yt_dlp.YoutubeDL({'format': YTDL_FORMAT,
@@ -229,9 +230,9 @@ async def play(ctx: commands.Context, *args):
                          for i in range(MAX_SONGS):
                               entry = info['entries'][i]
                               # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
-                              await ctx.send('downloading ' + (f'https://youtu.be/{entry["id"]}' if will_need_search else f'`{entry["title"]}`'))
+                              # await ctx.send('downloading ' + (f'https://youtu.be/{entry["id"]}' if will_need_search else f'`{entry["title"]}`'))
                               # download the query as a list of songs (checks if the song has been already downloaded)
-                              # TODO fix
+                              # TODO fix downloading multiple times
                               try:
                                    ydl.download([query])
                               except yt_dlp.utils.DownloadError as err:
