@@ -186,11 +186,11 @@ async def play(ctx: commands.Context, *args):
           # Fetch the track's details
           track = spoti_api.track(track_id)
           # Print the track's name
-          print(track['name'])
           artists = [artist['name'] for artist in track['artists']]
           song_search_query = ', '.join(artists) +" "+ track['name']
           await ctx.send(song_search_query)
-          play(ctx, song_search_query)
+          await play(ctx, song_search_query)
+          return
           '''
           # Spotify URI for the playlist you're interested in
           playlist_uri = 'SPOTIFY_PLAYLIST_URI'
