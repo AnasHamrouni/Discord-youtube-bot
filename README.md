@@ -35,7 +35,7 @@ With the discontinuation of several popular Discord music bots, MusicBot serves 
 ### Step 2: Spotify Credentials
 1. Visit the Spotify Developer Dashboard.
 2. Create a new app to obtain your Client ID and Client Secret.
-3. Add these credentials to your bot's configuration (detailed in the next steps).
+3. Add these credentials to your bot's configuration .env file based on the .env_example.
 
 ### Step 3: Adding Your Bot to a Server
 1. Within the Developer Portal, proceed to the "OAuth2" section.
