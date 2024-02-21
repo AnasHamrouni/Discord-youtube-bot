@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 import time
 import random
 import spotipy
-from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyClientCredentials
 load_dotenv()
 TOKEN = os.getenv('BOT_TOKEN')
 PREFIX = os.getenv('BOT_PREFIX', '.')
@@ -31,10 +31,9 @@ client_id  = os.getenv('SPOTIFY_CLIENT_ID')
 client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
 
 # Authenticate with Spotify using OAuth
-spoti_api = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
-                                               client_secret=client_secret,
-                                               redirect_uri="localhost",
-                                               scope= 'playlist-read-private'))
+client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+spoti_api = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
 
 
 
@@ -182,6 +181,14 @@ async def play(ctx: commands.Context, *args):
      # this is equivalent to --force-ipv4 (line 312 of https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/options.py)
      await ctx.send(f'looking for `{query}`...')
      if "spotify" in query:
+          # Extract the track ID from the URL
+          track_id = query.split("/")[-1].split("?")[0]
+          # Fetch the track's details
+          track = spoti_api.track(track_id)
+          # Print the track's name
+          print(track['name'])
+          await ctx.send(f"Song name: {track['name']}")
+          '''
           # Spotify URI for the playlist you're interested in
           playlist_uri = 'SPOTIFY_PLAYLIST_URI'
 
@@ -192,6 +199,7 @@ async def play(ctx: commands.Context, *args):
           for idx, item in enumerate(results['items']):
                track = item['track']
                await ctx.send(f"{idx}: {track['name']} by {', '.join([artist['name'] for artist in track['artists']])}")
+          '''
      else:
           if "list" in query:
                with yt_dlp.YoutubeDL({'format': YTDL_FORMAT,
