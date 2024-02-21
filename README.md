@@ -1,3 +1,4 @@
+### BASED ON https://github.com/maxcutlyp/YoutubeBot, MANY THANKS <3
 # YoutubeBot: Your Personal Discord Bot for YouTube Playback
 
 Welcome to the YoutubeBot repository! This Discord bot is designed to enhance your server with the ability to play YouTube videos directly in your voice channels. It's a perfect solution for shared music experiences or just adding a bit of fun to your server's voice chats. Let's dive into how you can get this bot up and running for your community.
@@ -9,7 +10,10 @@ Welcome to the YoutubeBot repository! This Discord bot is designed to enhance yo
   - Alternate command: `.s`
 - **Queue Command**: Use `.queue` to display the current list of videos queued for playback.
   - Alternate command: `.q`
-
+- **Shuffle Command**: Use `.shuffle` to randomly shuffle the order of videos in the queue, adding an element of surprise to your playback.
+  - Alternate command: `.sh`
+- **Pop Command**: Use `.pop {n}` to remove a specific video from the queue based on its position. If no position is specified, the last video in the queue will be removed.
+  - Alternate command: `.pp`
 ## Getting Started
 
 In light of recent events where popular Discord music bots have been discontinued, YoutubeBot offers a self-hosted alternative that you can run on your own server. This guide will help you through the setup process, ensuring you have your own YouTube-playing bot in no time.
