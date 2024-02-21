@@ -22,7 +22,7 @@ PRINT_STACK_TRACE = os.getenv('PRINT_STACK_TRACE', '1').lower() in ('true', 't',
 BOT_REPORT_COMMAND_NOT_FOUND = os.getenv('BOT_REPORT_COMMAND_NOT_FOUND', '1').lower() in ('true', 't', '1')
 BOT_REPORT_DL_ERROR = os.getenv('BOT_REPORT_DL_ERROR', '0').lower() in ('true', 't', '1')
 unix_timestamp = int(time.time())
-MAX_SONGS = 15
+MAX_SONGS = 10
 
 
 
@@ -181,28 +181,33 @@ async def play(ctx: commands.Context, *args):
      # this is equivalent to --force-ipv4 (line 312 of https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/options.py)
      await ctx.send(f'looking for `{query}`...')
      if "spotify" in query:
-          # Extract the track ID from the URL
-          track_id = query.split("/")[-1].split("?")[0]
-          # Fetch the track's details
-          track = spoti_api.track(track_id)
-          # Print the track's name
-          artists = [artist['name'] for artist in track['artists']]
-          song_search_query = ', '.join(artists) +" "+ track['name']
-          await ctx.send(song_search_query)
-          await play(ctx, song_search_query)
-          return
-          '''
-          # Spotify URI for the playlist you're interested in
-          playlist_uri = 'SPOTIFY_PLAYLIST_URI'
+          if "track" in query:
+               # Extract the track ID from the URL
+               track_id = query.split("/")[-1].split("?")[0]
+               # Fetch the track's details
+               track = spoti_api.track(track_id)
+               # Print the track's name
+               artists = [artist['name'] for artist in track['artists']]
+               song_search_query = ', '.join(artists) +" "+ track['name']
+               await play(ctx, song_search_query)
+               return
+          elif "playlist" in query:
+               playlist_id = query.split("/")[-1].split("?")[0]
+               # Fetch the playlist's details
+               playlist = spoti_api.playlist_tracks(playlist_id)
 
-          # Fetch the playlist data
-          results = spoti_api.playlist_tracks(playlist_uri)
+               # Iterate through the tracks in the playlist
+               for item in playlist['items'][:MAX_SONGS]:
+                    track = item['track']
+                    artists = [artist['name'] for artist in track['artists']]
+                    song_search_query = ', '.join(artists) + " " + track['name']
 
-          # Extract and print out track names and artists
-          for idx, item in enumerate(results['items']):
-               track = item['track']
-               await ctx.send(f"{idx}: {track['name']} by {', '.join([artist['name'] for artist in track['artists']])}")
-          '''
+                    # Enqueue or play each track
+                    # Note: Depending on your bot's design, you might need to enqueue these tracks
+                    # or play them directly. The following line is a placeholder to indicate where
+                    # you would handle each track.
+                    await play(ctx, song_search_query)
+               return
      else:
           if "list" in query:
                with yt_dlp.YoutubeDL({'format': YTDL_FORMAT,
