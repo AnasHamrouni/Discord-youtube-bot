@@ -32,7 +32,9 @@ client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
 
 # Authenticate with Spotify using OAuth
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
-                                               client_secret=client_secret))
+                                               client_secret=client_secret,
+                                               redirect_uri="localhost",
+                                               scope= 'playlist-read-private'))
 
 
 
