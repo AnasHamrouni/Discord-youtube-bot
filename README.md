@@ -43,6 +43,6 @@ Before we start, please ensure you have a hosting solution for the bot, such as 
 3. Install the required dependencies by running `pip install -r requirements.txt` in your terminal.
 4. Duplicate the ".env_example" file and rename the copy to ".env".
 5. Obtain your bot's token from the Bot page on the Developer Portal and paste it into your ".env" file.
-6. Launch the bot using `nohup ./youtubebot.py &` on Linux/Unix or `python youtubebot.py` on Windows. Ensure the script is executable if you're on Linux/Unix.
+6. Launch the bot using `python youtubebot.py`. Ensure the script is executable if you're on Linux/Unix `chmod +x youtubebot.py`.
 
 Congratulations! Your YoutubeBot should now be operational. Test it by joining a VC and using the commands. If you encounter any issues or have questions, feel free to reach out for support.
