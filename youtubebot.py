@@ -105,7 +105,7 @@ async def shuffle(ctx):
         await ctx.send("Not enough songs in the queue to shuffle.")
     else:
         await ctx.send("There's nothing in the queue to shuffle.")
-@bot.command(name='pause')
+@bot.command(name='pause', aliases=['pa'])
 async def pause(ctx):
     voice_client = ctx.guild.voice_client
 
@@ -115,7 +115,7 @@ async def pause(ctx):
     else:
         await ctx.send("There is no music currently playing.")
 
-@bot.command(name='resume')
+@bot.command(name='resume', aliases=['r'])
 async def resume(ctx):
     voice_client = ctx.guild.voice_client
 
