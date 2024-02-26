@@ -233,7 +233,7 @@ async def play(ctx: commands.Context, *args):
                               # await ctx.send('downloading ' + (f'https://youtu.be/{entry["id"]}' if will_need_search else f'`{entry["title"]}`'))
                               # download the query as a list of songs (checks if the song has been already downloaded)
                               # TODO fix downloading multiple times
-                              await play(ctx, f"https://youtu.be/{entry["id"]}")
+                              await play(ctx, f"https://youtu.be/{entry['id']}")
           else:
                with yt_dlp.YoutubeDL({'format': YTDL_FORMAT,
                               'source_address': '0.0.0.0',
