@@ -179,7 +179,7 @@ async def play(ctx: commands.Context, *args):
 
      # source address as 0.0.0.0 to force ipv4 because ipv6 breaks it for some reason
      # this is equivalent to --force-ipv4 (line 312 of https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/options.py)
-     await ctx.send(f'looking for `{query}`...')
+     #await ctx.send(f'looking for `{query}`...')
      if "spotify" in query:
           if "track" in query:
                # Extract the track ID from the URL
@@ -233,20 +233,7 @@ async def play(ctx: commands.Context, *args):
                               # await ctx.send('downloading ' + (f'https://youtu.be/{entry["id"]}' if will_need_search else f'`{entry["title"]}`'))
                               # download the query as a list of songs (checks if the song has been already downloaded)
                               # TODO fix downloading multiple times
-                              try:
-                                   ydl.download([query])
-                              except yt_dlp.utils.DownloadError as err:
-                                   await notify_about_failure(ctx, err)
-                                   return
-
-                              path = f'./dl/{server_id}/{entry["id"]}.{entry["ext"]}'
-                              try: queues[server_id].append((path, entry))
-                              except KeyError: # first in queue
-                                   queues[server_id] = [(path, entry)]
-                                   try: connection = await voice_state.channel.connect()
-                                   except discord.ClientException: connection = get_voice_client_from_channel_id(voice_state.channel.id)
-                                   connection.play(discord.FFmpegOpusAudio(path), after=lambda error=None, connection=connection, server_id=server_id:
-                                                                                     after_track(error, connection, server_id))
+                              await play(ctx, f"https://youtu.be/{entry["id"]}")
           else:
                with yt_dlp.YoutubeDL({'format': YTDL_FORMAT,
                               'source_address': '0.0.0.0',
@@ -265,22 +252,23 @@ async def play(ctx: commands.Context, *args):
 
                     if 'entries' in info:
                          info = info['entries'][0]
-                    # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
-                    # await ctx.send('downloading ' + (f'https://youtu.be/{info["id"]}' if will_need_search else f'`{info["title"]}`'))
-                    try:
-                         ydl.download([query])
-                    except yt_dlp.utils.DownloadError as err:
-                         await notify_about_failure(ctx, err)
-                         return
+                         # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
+                         await ctx.send('adding ' + (f'https://youtu.be/{info["id"]}' if will_need_search else f'`{info["title"]}`' +' to queue'))
+                         try:
+                              ydl.download([query])
+                         except yt_dlp.utils.DownloadError as err:
+                              await notify_about_failure(ctx, err)
+                              return
 
-                    path = f'./dl/{server_id}/{info["id"]}.{info["ext"]}'
-                    try: queues[server_id].append((path, info))
-                    except KeyError: # first in queue
-                         queues[server_id] = [(path, info)]
-                         try: connection = await voice_state.channel.connect()
-                         except discord.ClientException: connection = get_voice_client_from_channel_id(voice_state.channel.id)
-                         connection.play(discord.FFmpegOpusAudio(path), after=lambda error=None, connection=connection, server_id=server_id:
-                                                                           after_track(error, connection, server_id))
+                         path = f'./dl/{server_id}/{info["id"]}.{info["ext"]}'
+                         try: queues[server_id].append((path, info))
+                         except KeyError: # first in queue
+                              queues[server_id] = [(path, info)]
+                              try: connection = await voice_state.channel.connect()
+                              except discord.ClientException: connection = get_voice_client_from_channel_id(voice_state.channel.id)
+                              connection.play(discord.FFmpegOpusAudio(path), after=lambda error=None, connection=connection, server_id=server_id:
+                                                                                after_track(error, connection, server_id))
+     
 
 
 
