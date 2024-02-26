@@ -325,12 +325,14 @@ async def on_voice_state_update(member: discord.User, before: discord.VoiceState
           try: shutil.rmtree(f'./dl/{server_id}/')
           except FileNotFoundError: pass
      # Moved to a different voice channel within the same server
-     if before.channel != after.channel and after.channel is not None:
-          await pause(member.guild.id)
-          # Do any additional handling needed during the pause
-          # Wait for a brief moment if needed (you can adjust the sleep duration)
-          await asyncio.sleep(1)  # Import asyncio if you haven't already
-          await resume(member.guild.id)
+     if before.channel != after.channel and before.channel is not None and after.channel is not None:
+          voice_client = discord.utils.get(bot.voice_clients, guild=member.guild)
+          if voice_client and voice_client.is_playing():
+               # Stop the current playback
+               voice_client.pause()
+               await asyncio.sleep(1)
+               voice_client.resume()
+
 
 @bot.event
 async def on_command_error(ctx: discord.ext.commands.Context, err: discord.ext.commands.CommandError):
