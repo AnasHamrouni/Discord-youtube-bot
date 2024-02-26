@@ -252,22 +252,22 @@ async def play(ctx: commands.Context, *args):
 
                     if 'entries' in info:
                          info = info['entries'][0]
-                         # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
-                         await ctx.send('adding ' + (f'https://youtu.be/{info["id"]}' if will_need_search else f'`{info["title"]}`' +' to queue'))
-                         try:
-                              ydl.download([query])
-                         except yt_dlp.utils.DownloadError as err:
-                              await notify_about_failure(ctx, err)
-                              return
+                    # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
+                    await ctx.send('adding ' + (f'https://youtu.be/{info["id"]}' if will_need_search else f'`{info["title"]}`' +' to queue'))
+                    try:
+                         ydl.download([query])
+                    except yt_dlp.utils.DownloadError as err:
+                         await notify_about_failure(ctx, err)
+                         return
 
-                         path = f'./dl/{server_id}/{info["id"]}.{info["ext"]}'
-                         try: queues[server_id].append((path, info))
-                         except KeyError: # first in queue
-                              queues[server_id] = [(path, info)]
-                              try: connection = await voice_state.channel.connect()
-                              except discord.ClientException: connection = get_voice_client_from_channel_id(voice_state.channel.id)
-                              connection.play(discord.FFmpegOpusAudio(path), after=lambda error=None, connection=connection, server_id=server_id:
-                                                                                after_track(error, connection, server_id))
+                    path = f'./dl/{server_id}/{info["id"]}.{info["ext"]}'
+                    try: queues[server_id].append((path, info))
+                    except KeyError: # first in queue
+                         queues[server_id] = [(path, info)]
+                         try: connection = await voice_state.channel.connect()
+                         except discord.ClientException: connection = get_voice_client_from_channel_id(voice_state.channel.id)
+                         connection.play(discord.FFmpegOpusAudio(path), after=lambda error=None, connection=connection, server_id=server_id:
+                                                                           after_track(error, connection, server_id))
      
 
 
