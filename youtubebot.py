@@ -57,25 +57,16 @@ def main():
 
 @bot.command(name='queue', aliases=['q'])
 async def queue(ctx: commands.Context, *args):
-    # Use .get() with a default empty list to avoid KeyError
-    queue = queues.get(ctx.guild.id, [])
-    
-    if not queue:
-        await ctx.send("The bot isn't playing anything.")
-        return
-
-    # Assuming each queue item is a dict with a "title" key
-    queue_str = ''
-    for index, item in enumerate(queue):
-        title = item.get("title", "Unknown Title")  # Default to "Unknown Title" if not found
-        queue_str += f'‣ {title}\n' if index == 0 else f'**{index+1}:** {title}\n'
-    
-    # Ensure COLOR is defined, for example: COLOR = 0xFF5733
-    embedVar = discord.Embed(color=COLOR)
-    embedVar.add_field(name='Now playing:', value=queue_str, inline=False)
-    await ctx.send(embed=embedVar)
-
-    # Your sense_checks function call (make sure it's defined and works as intended)
+    try: queue = queues[ctx.guild.id]
+    except KeyError: queue = None
+    if queue == None:
+        await ctx.send('the bot isn\'t playing anything')
+    else:
+        title_str = lambda val: '‣ %s\n\n' % val[1] if val[0] == 0 else '**%2d:** %s\n' % val
+        queue_str = ''.join(map(title_str, enumerate([i[1]["title"] for i in queue])))
+        embedVar = discord.Embed(color=COLOR)
+        embedVar.add_field(name='Now playing:', value=queue_str)
+        await ctx.send(embed=embedVar)
     if not await sense_checks(ctx):
         return
 
