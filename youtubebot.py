@@ -57,18 +57,28 @@ def main():
 
 @bot.command(name='queue', aliases=['q'])
 async def queue(ctx: commands.Context, *args):
-    try: queue = queues[ctx.guild.id]
-    except KeyError: queue = None
-    if queue == None:
-        await ctx.send('the bot isn\'t playing anything')
-    else:
-        title_str = lambda val: '‣ %s\n\n' % val[1] if val[0] == 0 else '**%2d:** %s\n' % val
-        queue_str = ''.join(map(title_str, enumerate([i[1]["title"] for i in queue])))
-        embedVar = discord.Embed(color=COLOR)
-        embedVar.add_field(name='Now playing:', value=queue_str)
-        await ctx.send(embed=embedVar)
-    if not await sense_checks(ctx):
-        return
+     try:
+          queue = queues[ctx.guild.id]
+     except KeyError:
+          queue = None
+
+     if not queue:
+          await ctx.send("The bot isn't playing anything.")
+          return
+
+     title_str = lambda val: '‣ %s\n\n' % val[1] if val[0] == 0 else '**%2d:** %s\n' % val
+     queue_str = ''.join(map(title_str, enumerate([i[1]["title"] for i in queue])))
+
+     if len(queue_str) > 1020:  # Truncate if longer than 1020 characters
+          queue_str = queue_str[:1020] + "... (more items in queue)"
+
+     embedVar = discord.Embed(color=COLOR)
+     embedVar.add_field(name='Now playing:', value=queue_str, inline=False)
+     await ctx.send(embed=embedVar)
+
+     if not await sense_checks(ctx):
+          return
+
 
 
 @bot.command(name='pop', aliases=['pp'])
