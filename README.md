@@ -23,8 +23,7 @@ Welcome to the MusicBot repository! This Discord bot is designed to enrich your 
 ## Getting Started
 With the discontinuation of several popular Discord music bots, MusicBot serves as a self-hosted alternative, giving you the freedom to run it on your own server. This setup guide ensures you can have a fully functional music-playing bot, capable of streaming from YouTube and Spotify, up and running swiftly.
 
-### Prerequisites
-Before beginning, ensure you have a suitable hosting solution for the bot, such as a Raspberry Pi, a cloud server, or a dedicated home server. A static IP address is not required.
+### Setup
 
 ### Step 1: Creating Your Bot
 1. Visit the [Discord Developer Portal](https://discord.com/developers/applications).
@@ -33,17 +32,22 @@ Before beginning, ensure you have a suitable hosting solution for the bot, such 
 4. Optionally, customize your bot's profile (name, picture, etc.) post-creation.
 5. Navigate to the "Bot" tab, assign a username for your bot, and enable the "Message Content Intent" to facilitate command processing.
 
-### Step 2: Adding Your Bot to a Server
+### Step 2: Spotify Credentials
+1. Visit the Spotify Developer Dashboard.
+2. Create a new app to obtain your Client ID and Client Secret.
+3. Add these credentials to your bot's configuration .env file based on the .env_example.
+
+### Step 3: Adding Your Bot to a Server
 1. Within the Developer Portal, proceed to the "OAuth2" section.
 2. Under "URL generator", choose "bot" and then select "Administrator" under "Bot Permissions" for comprehensive functionality (alternatively, opt for more restrictive permissions as needed).
 3. Copy the generated URL, open it in your browser, select your server, and authorize the bot.
 
-### Step 3: Activating Your Bot
+### Step 4: Activating Your Bot
 1. Download the MusicBot code from this repository.
 2. Ensure Python 3.8 or newer is installed on your host machine.
 3. Install the necessary dependencies by executing `pip install -r requirements.txt` in your terminal.
 4. Copy the ".env_example" file, renaming the duplicate to ".env".
 5. Retrieve your bot's token from the Bot section on the Developer Portal and input it into your ".env" file.
-6. Start the bot with `python musicbot.py`, making the script executable on Linux/Unix systems (`chmod +x musicbot.py`).
+6. Start the bot with `python youtubebot.py`, making the script executable on Linux/Unix systems (`chmod +x youtubebot.py`).
 
 Your MusicBot is now ready to liven up your Discord server! Test its functionality by joining a VC and experimenting with the commands. Should you encounter any issues or have queries, don't hesitate to seek support.
