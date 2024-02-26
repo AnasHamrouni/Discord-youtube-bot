@@ -69,8 +69,8 @@ async def queue(ctx: commands.Context, *args):
      title_str = lambda val: '‣ %s\n\n' % val[1] if val[0] == 0 else '**%2d:** %s\n' % val
      queue_str = ''.join(map(title_str, enumerate([i[1]["title"] for i in queue])))
 
-     if len(queue_str) > 1020:  # Truncate if longer than 1020 characters
-          queue_str = queue_str[:1020] + "... (more items in queue)"
+     if len(queue_str) > 800:  # Truncate if longer than 1020 characters
+          queue_str = queue_str[:800] + "... (more items in queue)"
 
      embedVar = discord.Embed(color=COLOR)
      embedVar.add_field(name='Now playing:', value=queue_str, inline=False)
