@@ -263,7 +263,7 @@ async def play(ctx: commands.Context, *args):
                     if 'entries' in info:
                          info = info['entries'][0]
                     # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
-                    await ctx.send('adding ' + (f'https://youtu.be/{info["id"]} to the queue' if will_need_search else f'`{info["title"]}` to the queue'))
+                    await ctx.send('adding ' + f'`{info["title"]}` to the queue')
                     try:
                          ydl.download([query])
                     except yt_dlp.utils.DownloadError as err:
