@@ -48,12 +48,23 @@ bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents(voice_states=T
 queues = {} # {server_id: [(vid_file, info), ...]}
 
 def main():
-     if TOKEN is None:
-          return ("no token provided. Please create a .env file containing the token.\n"
-                    "for more information view the README.md")
-     try: bot.run(TOKEN)
-     except discord.PrivilegedIntentsRequired as error:
-          return error
+    if TOKEN is None:
+        return ("No token provided. Please create a .env file containing the token.\n"
+                "For more information view the README.md")
+
+    while True:
+        try:
+            bot.run(TOKEN)
+            break  # If bot.run completes without exception, exit loop
+        except discord.PrivilegedIntentsRequired as error:
+            return error  # Handle specific discord errors as per your requirement
+        except Exception as e:
+            print(f"An error occurred: {e}. Restarting bot in 5 seconds...")
+            time.sleep(5)  # Wait for 5 seconds before restarting the bot
+
+# Ensure that your bot token is correctly initialized before calling main
+if __name__ == "__main__":
+    main()
 
 @bot.command(name='queue', aliases=['q'])
 async def queue(ctx: commands.Context, *args):
