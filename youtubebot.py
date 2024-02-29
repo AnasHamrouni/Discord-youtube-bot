@@ -59,9 +59,6 @@ def main():
             print(f"An error occurred: {e}. Restarting bot in 5 seconds...")
             time.sleep(5)  # Wait for 5 seconds before restarting the bot
 
-# Ensure that your bot token is correctly initialized before calling main
-if __name__ == "__main__":
-    main()
 
 @bot.command(name='queue', aliases=['q'])
 async def queue(ctx: commands.Context, *args):
