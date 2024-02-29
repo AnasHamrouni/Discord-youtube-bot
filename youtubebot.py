@@ -55,9 +55,6 @@ def main():
     while True:
         try:
             bot.run(TOKEN)
-            break  # If bot.run completes without exception, exit loop
-        except discord.PrivilegedIntentsRequired as error:
-            return error  # Handle specific discord errors as per your requirement
         except Exception as e:
             print(f"An error occurred: {e}. Restarting bot in 5 seconds...")
             time.sleep(5)  # Wait for 5 seconds before restarting the bot
