@@ -386,7 +386,7 @@ async def on_message(message):
      allowed_channel_id = 538987905947926559  # Replace with your desired channel ID
 
      # Check if the message is in the allowed channel
-     if message.channel.id != allowed_channel_id and message.channel.id != 1121048498578665563 :
+     if message.channel.id != allowed_channel_id and message.channel.id != 1121048498578665563 and message.channel.id !=1212885887948431380:
           return
      if message.author.bot and message.author.id != 1197649089735688293:
           return
