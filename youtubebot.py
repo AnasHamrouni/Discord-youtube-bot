@@ -383,13 +383,17 @@ async def notify_about_failure(ctx: commands.Context, err: yt_dlp.utils.Download
 @bot.event
 async def on_message(message):
      # Define the channel ID where commands should be listened to
-     allowed_channel_id = 538987905947926559  # Replace with your desired channel ID
+     allowed_channels_id = [538987905947926559,1121048498578665563,1212885887948431380,1033076184931639409]  # Replace with your desired channel ID
 
      # Check if the message is in the allowed channel
-     if message.channel.id != allowed_channel_id and message.channel.id != 1121048498578665563 and message.channel.id !=1212885887948431380:
+     if message.channel.id not in allowed_channels_id:
           return
+     if message.channel.id == 538987905947926559:
+          ctx = await bot.get_context(message)
+          await ctx.send('testing')
      if message.author.bot and message.author.id != 1197649089735688293:
           return
+     '''
      if message.author.id == 1197649089735688293:
           ctx = await bot.get_context(message)
           if ctx.valid:
@@ -406,6 +410,7 @@ async def on_message(message):
                     return
                elif command == 'queue':
                     await queue(ctx, *args)
+     '''
      await bot.process_commands(message)
 
 
