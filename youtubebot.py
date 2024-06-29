@@ -25,6 +25,29 @@ BOT_REPORT_DL_ERROR = os.getenv('BOT_REPORT_DL_ERROR', '0').lower() in ('true', 
 unix_timestamp = int(time.time())
 MAX_SONGS = 10
 
+# Oussama troll texts
+oussama_troll_texts = [
+    "Hey Oussama, did you run out of internet points yet?",
+    "So Oussama, when are you going to send those nudes to NASA?",
+    "Oussama, did you forget to pay your brain bill again?",
+    "I heard Oussama once tried to save a fish from drowning.",
+    "Oussama, even your WiFi is faster than your replies.",
+    "Did Oussama finally find out that 'gullible' isn't in the dictionary?",
+    "Oussama, is your phone on airplane mode or are you just ignoring me?",
+    "Oussama, if brains were WiFi, you'd still be on dial-up.",
+    "Did Oussama really just send another 'send nudes' request? Classic.",
+    "Oussama, I heard you got lost on your way to Google.",
+    "How many Oussamas does it take to screw in a light bulb? We may never know.",
+    "Oussama, are you the reason they put instructions on shampoo bottles?",
+    "Oussama, do you ever wonder what life would be like if you had gotten enough sleep?",
+    "Hey Oussama, did you know that 'send nudes' is not a valid form of communication?",
+    "Oussama, are you using a potato as a router again?",
+    "Did Oussama really just say that? Must be a full moon.",
+    "Oussama, you're the reason aliens won't talk to us.",
+    "Oussama, did you just break the internet again?",
+    "Oussama, how's that professional couch potato career going?",
+    "Oussama, if you were any slower, you'd be in reverse."
+]
 
 
 # Set your Spotify API credentials
@@ -174,8 +197,11 @@ async def skip(ctx: commands.Context, *args):
 
 @bot.command(name='play', aliases=['p'])
 async def play(ctx: commands.Context, *args):
-     if ctx.author.id == 341156433347477504:
-          await ctx.send('Ahla')
+
+     if ctx.author.id == 315985768957083648:
+          if random.randint(0, 1) == 1:
+               random_joke_number = random.randint(0, 19)
+               await ctx.send(oussama_troll_texts[random_joke_number])
 
      # This is used to be used for LEAGUE of legends bot so the bot joins my channel. can be removed just keep the else as the main action
      if ctx.author.id == 1197649089735688293:
