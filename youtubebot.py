@@ -174,11 +174,16 @@ async def skip(ctx: commands.Context, *args):
 
 @bot.command(name='play', aliases=['p'])
 async def play(ctx: commands.Context, *args):
+     if ctx.author.id == 341156433347477504:
+          await ctx.send('Ahla')
+
+     # This is used to be used for LEAGUE of legends bot so the bot joins my channel. can be removed just keep the else as the main action
      if ctx.author.id == 1197649089735688293:
           member = ctx.guild.get_member(341156433347477504)
           voice_state = member.voice
      else:
           voice_state = ctx.author.voice
+
      if not await sense_checks(ctx, voice_state=voice_state):
           return
      query = ' '.join(args)
@@ -388,9 +393,6 @@ async def on_message(message):
      # Check if the message is in the allowed channel
      if message.channel.id not in allowed_channels_id:
           return
-     if message.channel.id == 538987905947926559:
-          ctx = await bot.get_context(message)
-          await ctx.send('testing')
      if message.author.bot and message.author.id != 1197649089735688293:
           return
      '''
