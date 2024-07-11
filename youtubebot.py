@@ -25,6 +25,8 @@ BOT_REPORT_DL_ERROR = os.getenv('BOT_REPORT_DL_ERROR', '0').lower() in ('true', 
 unix_timestamp = int(time.time())
 MAX_SONGS = 10
 
+# Able to reset 7daystodie server
+daystodieCommandWhitelist = [322600779078959125,341156433347477504,1138604718365606051,191991730206146562,366585211917697036]
 # Oussama troll texts
 oussama_troll_texts = [
     "Oussama, did you just discover Twenty One Pilots yesterday?",
@@ -86,32 +88,36 @@ def main():
 
 @bot.command(name='restartserver', aliases=['rs'])
 async def queue(ctx: commands.Context, *args):
-     """Kills all running Docker containers and starts the specified Docker container."""
-     try:
-          # Kill all running Docker containers
-          sp.run(["sudo docker kill $(sudo docker ps -q)"], check=True, shell=True)
-          await ctx.send("All running Docker containers killed.")
-          # Command to start the specified Docker container
-          command = (
-               "sudo docker run -d --rm "
-               "-p 8080:8080/tcp -p 8081:8081/tcp "
-               "-p 27015:27015/tcp -p 26900:26900/tcp "
-               "-p 27036:27036/tcp -p 26900:26900/udp "
-               "-p 26901:26901/udp -p 26902:26902/udp "
-               "-p 27015:27015/udp -p 27031:27031/udp "
-               "-p 27032:27032/udp -p 27033:27033/udp "
-               "-p 27034:27034/udp -p 27035:27035/udp "
-               "-p 27036:27036/udp "
-               "-v /home/ubuntu/7daystodie/server:/home/steam/server "
-               "-v /home/ubuntu/7daystodie/saves:/home/steam/.local/share "
-               "7days"
-          )
 
-          # Start the specified Docker container
-          sp.run(command, check=True, shell=True)
-          await ctx.send("Docker container started successfully.")
-     except sp.CalledProcessError as e:
-          await ctx.send(f"Error: {e}")
+     if ctx.author.id in daystodieCommandWhitelist:
+          """Kills all running Docker containers and starts the specified Docker container."""
+          try:
+               # Kill all running Docker containers
+               sp.run(["sudo docker kill $(sudo docker ps -q)"], check=True, shell=True)
+               await ctx.send("All running Docker containers killed.")
+               # Command to start the specified Docker container
+               command = (
+                    "sudo docker run -d --rm "
+                    "-p 8080:8080/tcp -p 8081:8081/tcp "
+                    "-p 27015:27015/tcp -p 26900:26900/tcp "
+                    "-p 27036:27036/tcp -p 26900:26900/udp "
+                    "-p 26901:26901/udp -p 26902:26902/udp "
+                    "-p 27015:27015/udp -p 27031:27031/udp "
+                    "-p 27032:27032/udp -p 27033:27033/udp "
+                    "-p 27034:27034/udp -p 27035:27035/udp "
+                    "-p 27036:27036/udp "
+                    "-v /home/ubuntu/7daystodie/server:/home/steam/server "
+                    "-v /home/ubuntu/7daystodie/saves:/home/steam/.local/share "
+                    "7days"
+               )
+
+               # Start the specified Docker container
+               sp.run(command, check=True, shell=True)
+               await ctx.send("Docker container started successfully.")
+          except sp.CalledProcessError as e:
+               await ctx.send(f"Error: {e}")
+     else:
+          await ctx.send("NICE TRY")
 
 @bot.command(name='queue', aliases=['q'])
 async def queue(ctx: commands.Context, *args):
