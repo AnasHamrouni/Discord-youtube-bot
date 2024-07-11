@@ -89,11 +89,11 @@ async def queue(ctx: commands.Context, *args):
      """Kills all running Docker containers and starts the specified Docker container."""
      try:
           # Kill all running Docker containers
-          sp.run(["docker kill $(docker ps -q)"], check=True, shell=True)
+          sp.run(["sudo docker kill $(docker ps -q)"], check=True, shell=True)
           await ctx.send("All running Docker containers killed.")
           # Command to start the specified Docker container
           command = (
-               "docker run -d --rm "
+               "sudo docker run -d --rm "
                "-p 8080:8080/tcp -p 8081:8081/tcp "
                "-p 27015:27015/tcp -p 26900:26900/tcp "
                "-p 27036:27036/tcp -p 26900:26900/udp "
