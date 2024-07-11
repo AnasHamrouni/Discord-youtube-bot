@@ -92,8 +92,13 @@ async def queue(ctx: commands.Context, *args):
      if ctx.author.id in daystodieCommandWhitelist:
           """Kills all running Docker containers and starts the specified Docker container."""
           try:
+               # Get the list of running Docker container IDs
+               result = sp.run(["sudo docker ps -q"], capture_output=True, text=True, check=True)
+               container_ids = result.stdout.strip()
+               # If there are running containers, kill them
+               if container_ids:
+                    sp.run(["sudo docker kill"] + container_ids.split(), check=True, shell=True)
                # Kill all running Docker containers
-               sp.run(["sudo docker kill $(sudo docker ps -q)"], check=True, shell=True)
                await ctx.send("All running Docker containers killed.")
                # Command to start the specified Docker container
                command = (
