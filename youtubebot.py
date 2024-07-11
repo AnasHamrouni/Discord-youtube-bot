@@ -84,6 +84,35 @@ def main():
             time.sleep(5)  # Wait for 5 seconds before restarting the bot
 
 
+@bot.command(name='restartserver', aliases=['rs'])
+async def queue(ctx: commands.Context, *args):
+     """Kills all running Docker containers and starts the specified Docker container."""
+     try:
+          # Kill all running Docker containers
+          sp.run(["sudo", "docker", "kill", "$(sudo docker ps -q)"], check=True, shell=True)
+          await ctx.send("All running Docker containers killed.")
+          # Command to start the specified Docker container
+          command = (
+               "sudo docker run -d --rm "
+               "-p 8080:8080/tcp -p 8081:8081/tcp "
+               "-p 27015:27015/tcp -p 26900:26900/tcp "
+               "-p 27036:27036/tcp -p 26900:26900/udp "
+               "-p 26901:26901/udp -p 26902:26902/udp "
+               "-p 27015:27015/udp -p 27031:27031/udp "
+               "-p 27032:27032/udp -p 27033:27033/udp "
+               "-p 27034:27034/udp -p 27035:27035/udp "
+               "-p 27036:27036/udp "
+               "-v $(pwd)/server:/home/steam/server "
+               "-v $(pwd)/saves:/home/steam/.local/share "
+               "7days"
+          )
+
+          # Start the specified Docker container
+          sp.run(command, check=True, shell=True)
+          await ctx.send("Docker container started successfully.")
+     except sp.CalledProcessError as e:
+          await ctx.send(f"Error: {e}")
+
 @bot.command(name='queue', aliases=['q'])
 async def queue(ctx: commands.Context, *args):
      try:
