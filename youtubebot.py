@@ -102,8 +102,8 @@ async def queue(ctx: commands.Context, *args):
                "-p 27032:27032/udp -p 27033:27033/udp "
                "-p 27034:27034/udp -p 27035:27035/udp "
                "-p 27036:27036/udp "
-               "-v $(pwd)/server:/home/steam/server "
-               "-v $(pwd)/saves:/home/steam/.local/share "
+               "-v /home/ubuntu/7daystodie/server:/home/steam/server "
+               "-v /home/ubuntu/7daystodie/saves:/home/steam/.local/share "
                "7days"
           )
 
