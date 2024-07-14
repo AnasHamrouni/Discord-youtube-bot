@@ -113,8 +113,7 @@ async def queue(ctx: commands.Context, *args):
                     "-p 27036:27036/udp "
                     "-v /home/ubuntu/7daystodie/server:/home/steam/server "
                     "-v /home/ubuntu/7daystodie/saves:/home/steam/.local/share "
-                    "--ulimit core=-1 "
-                    "7days2"
+                    "7days"
                )
 
                # Start the specified Docker container
