@@ -113,8 +113,6 @@ async def queue(ctx: commands.Context, *args):
                     "-p 27036:27036/udp "
                     "-v /home/ubuntu/7daystodie/server:/home/steam/server "
                     "-v /home/ubuntu/7daystodie/saves:/home/steam/.local/share "
-                    "--env VM_MAX_MAP_COUNT=2262144 "
-                    "--sysctl vm.max_map_count=2262144 "
                     "--ulimit core=-1 "
                     "7days2"
                )
