@@ -279,7 +279,7 @@ async def play(ctx: commands.Context, *args):
                song_search_query = ', '.join(artists) +" "+ track['name']
                await play(ctx, song_search_query)
                return
-          elif "playlist" in query or "album" in query:
+          else:
                playlist_id = query.split("/")[-1].split("?")[0]
                # Fetch the playlist's details
                playlist = spoti_api.playlist_tracks(playlist_id)
