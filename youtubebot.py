@@ -267,6 +267,20 @@ async def play(ctx: commands.Context, *args):
 
      server_id = ctx.guild.id
 
+     ytdl_format_options = {'format': YTDL_FORMAT,
+                         'source_address': '0.0.0.0',
+                         'default_search': 'ytsearch',
+                         'outtmpl': '%(id)s.%(ext)s',
+                         'noplaylist': False,
+                         'playlistend': MAX_SONGS,
+                         'u' : YT_NAME,
+                         'p' : YT_PASS,
+                         # 'progress_hooks': [lambda info, ctx=ctx: video_progress_hook(ctx, info)],
+                         # 'match_filter': lambda info, incomplete, will_need_search=will_need_search, ctx=ctx: start_hook(ctx, info, incomplete, will_need_search),
+                         'paths': {'home': f'./dl/{server_id}'}}
+
+     ydl = yt_dlp.YoutubeDL(ytdl_format_options)
+
      # source address as 0.0.0.0 to force ipv4 because ipv6 breaks it for some reason
      # this is equivalent to --force-ipv4 (line 312 of https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/options.py)
      #await ctx.send(f'looking for `{query}`...')
@@ -301,67 +315,45 @@ async def play(ctx: commands.Context, *args):
 
      else:
           if "list" in query:
-               with yt_dlp.YoutubeDL({'format': YTDL_FORMAT,
-                                        'source_address': '0.0.0.0',
-                                        'default_search': 'ytsearch',
-                                        'outtmpl': '%(id)s.%(ext)s',
-                                        'noplaylist': False,
-                                        'playlistend': MAX_SONGS,
-                                        'u' : YT_NAME,
-                                        'p' : YT_PASS,
-                                        # 'progress_hooks': [lambda info, ctx=ctx: video_progress_hook(ctx, info)],
-                                        # 'match_filter': lambda info, incomplete, will_need_search=will_need_search, ctx=ctx: start_hook(ctx, info, incomplete, will_need_search),
-                                        'paths': {'home': f'./dl/{server_id}'}}) as ydl:
-                    try:
-                         info = ydl.extract_info(query, download=False)
-                    except yt_dlp.utils.DownloadError as err:
-                         await notify_about_failure(ctx, err)
-                         return
-                    if 'entries' in info:
-                    # Limit the number of entries to MAX_SONGS to handle playlists larger than MAX_SONGS
-                         for i in range(MAX_SONGS):
-                              entry = info['entries'][i]
-                              # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
-                              # await ctx.send('downloading ' + (f'https://youtu.be/{entry["id"]}' if will_need_search else f'`{entry["title"]}`'))
-                              # download the query as a list of songs (checks if the song has been already downloaded)
-                              # TODO fix downloading multiple times
-                              await play(ctx, f"https://youtu.be/{entry['id']}")
+               try:
+                    info = ydl.extract_info(query, download=False)
+               except yt_dlp.utils.DownloadError as err:
+                    await notify_about_failure(ctx, err)
+                    return
+               if 'entries' in info:
+               # Limit the number of entries to MAX_SONGS to handle playlists larger than MAX_SONGS
+                    for i in range(MAX_SONGS):
+                         entry = info['entries'][i]
+                         # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
+                         # await ctx.send('downloading ' + (f'https://youtu.be/{entry["id"]}' if will_need_search else f'`{entry["title"]}`'))
+                         # download the query as a list of songs (checks if the song has been already downloaded)
+                         # TODO fix downloading multiple times
+                         await play(ctx, f"https://youtu.be/{entry['id']}")
           else:
-               with yt_dlp.YoutubeDL({'format': YTDL_FORMAT,
-                              'source_address': '0.0.0.0',
-                              'default_search': 'ytsearch',
-                              'outtmpl': '%(id)s.%(ext)s',
-                              'noplaylist': True,
-                              'u' : YT_NAME,
-                              'p' : YT_PASS,
-                              'allow_playlist_files': False,
-                              # 'progress_hooks': [lambda info, ctx=ctx: video_progress_hook(ctx, info)],
-                              # 'match_filter': lambda info, incomplete, will_need_search=will_need_search, ctx=ctx: start_hook(ctx, info, incomplete, will_need_search),
-                              'paths': {'home': f'./dl/{server_id}'}}) as ydl:
-                    try:
-                         info = ydl.extract_info(query, download=False)
-                    except yt_dlp.utils.DownloadError as err:
-                         await notify_about_failure(ctx, err)
-                         return
+               try:
+                    info = ydl.extract_info(query, download=False)
+               except yt_dlp.utils.DownloadError as err:
+                    await notify_about_failure(ctx, err)
+                    return
 
-                    if 'entries' in info:
-                         info = info['entries'][0]
-                    # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
-                    await ctx.send('adding ' + f'`{info["title"]}` to the queue')
-                    try:
-                         ydl.download([query])
-                    except yt_dlp.utils.DownloadError as err:
-                         await notify_about_failure(ctx, err)
-                         return
+               if 'entries' in info:
+                    info = info['entries'][0]
+               # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
+               await ctx.send('adding ' + f'`{info["title"]}` to the queue')
+               try:
+                    ydl.download([query])
+               except yt_dlp.utils.DownloadError as err:
+                    await notify_about_failure(ctx, err)
+                    return
 
-                    path = f'./dl/{server_id}/{info["id"]}.{info["ext"]}'
-                    try: queues[server_id].append((path, info))
-                    except KeyError: # first in queue
-                         queues[server_id] = [(path, info)]
-                         try: connection = await voice_state.channel.connect()
-                         except discord.ClientException: connection = get_voice_client_from_channel_id(voice_state.channel.id)
-                         connection.play(discord.FFmpegOpusAudio(path), after=lambda error=None, connection=connection, server_id=server_id:
-                                                                           after_track(error, connection, server_id))
+               path = f'./dl/{server_id}/{info["id"]}.{info["ext"]}'
+               try: queues[server_id].append((path, info))
+               except KeyError: # first in queue
+                    queues[server_id] = [(path, info)]
+                    try: connection = await voice_state.channel.connect()
+                    except discord.ClientException: connection = get_voice_client_from_channel_id(voice_state.channel.id)
+                    connection.play(discord.FFmpegOpusAudio(path), after=lambda error=None, connection=connection, server_id=server_id:
+                                                                      after_track(error, connection, server_id))
      
 
 
