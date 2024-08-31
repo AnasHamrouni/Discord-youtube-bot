@@ -24,6 +24,8 @@ BOT_REPORT_COMMAND_NOT_FOUND = os.getenv('BOT_REPORT_COMMAND_NOT_FOUND', '1').lo
 BOT_REPORT_DL_ERROR = os.getenv('BOT_REPORT_DL_ERROR', '0').lower() in ('true', 't', '1')
 unix_timestamp = int(time.time())
 MAX_SONGS = 10
+YT_NAME = os.getenv('YT_NAME')
+YT_PASS = os.getenv('YT_PASS')
 
 # Able to reset 7daystodie server
 daystodieCommandWhitelist = [322600779078959125,341156433347477504,1138604718365606051,191991730206146562,366585211917697036]
@@ -305,6 +307,8 @@ async def play(ctx: commands.Context, *args):
                                         'outtmpl': '%(id)s.%(ext)s',
                                         'noplaylist': False,
                                         'playlistend': MAX_SONGS,
+                                        'u' : YT_NAME,
+                                        'p' : YT_PASS,
                                         # 'progress_hooks': [lambda info, ctx=ctx: video_progress_hook(ctx, info)],
                                         # 'match_filter': lambda info, incomplete, will_need_search=will_need_search, ctx=ctx: start_hook(ctx, info, incomplete, will_need_search),
                                         'paths': {'home': f'./dl/{server_id}'}}) as ydl:
@@ -328,6 +332,8 @@ async def play(ctx: commands.Context, *args):
                               'default_search': 'ytsearch',
                               'outtmpl': '%(id)s.%(ext)s',
                               'noplaylist': True,
+                              'u' : YT_NAME,
+                              'p' : YT_PASS,
                               'allow_playlist_files': False,
                               # 'progress_hooks': [lambda info, ctx=ctx: video_progress_hook(ctx, info)],
                               # 'match_filter': lambda info, incomplete, will_need_search=will_need_search, ctx=ctx: start_hook(ctx, info, incomplete, will_need_search),
