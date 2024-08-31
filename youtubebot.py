@@ -273,8 +273,8 @@ async def play(ctx: commands.Context, *args):
                          'outtmpl': '%(id)s.%(ext)s',
                          'noplaylist': False,
                          'playlistend': MAX_SONGS,
-                         'u' : YT_NAME,
-                         'p' : YT_PASS,
+                         'username' : YT_NAME,
+                         'password' : YT_PASS,
                          # 'progress_hooks': [lambda info, ctx=ctx: video_progress_hook(ctx, info)],
                          # 'match_filter': lambda info, incomplete, will_need_search=will_need_search, ctx=ctx: start_hook(ctx, info, incomplete, will_need_search),
                          'paths': {'home': f'./dl/{server_id}'}}
