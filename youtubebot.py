@@ -300,7 +300,6 @@ async def play(ctx: commands.Context, *args):
      else:
           if "list" in query:
                with yt_dlp.YoutubeDL({'format': YTDL_FORMAT,
-                                        'source_address': '0.0.0.0',
                                         'default_search': 'ytsearch',
                                         'outtmpl': '%(id)s.%(ext)s',
                                         'noplaylist': False,
@@ -324,7 +323,6 @@ async def play(ctx: commands.Context, *args):
                               await play(ctx, f"https://youtu.be/{entry['id']}")
           else:
                with yt_dlp.YoutubeDL({'format': YTDL_FORMAT,
-                              'source_address': '0.0.0.0',
                               'default_search': 'ytsearch',
                               'outtmpl': '%(id)s.%(ext)s',
                               'noplaylist': True,
