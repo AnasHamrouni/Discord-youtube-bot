@@ -300,6 +300,7 @@ async def play(ctx: commands.Context, *args):
      else:
           if "list" in query:
                with yt_dlp.YoutubeDL({'format': YTDL_FORMAT,
+                                        'source_address': '0.0.0.0',
                                         'default_search': 'ytsearch',
                                         'outtmpl': '%(id)s.%(ext)s',
                                         'noplaylist': False,
@@ -323,6 +324,7 @@ async def play(ctx: commands.Context, *args):
                               await play(ctx, f"https://youtu.be/{entry['id']}")
           else:
                with yt_dlp.YoutubeDL({'format': YTDL_FORMAT,
+                              'source_address': '0.0.0.0',
                               'default_search': 'ytsearch',
                               'outtmpl': '%(id)s.%(ext)s',
                               'noplaylist': True,
@@ -331,7 +333,6 @@ async def play(ctx: commands.Context, *args):
                               # 'match_filter': lambda info, incomplete, will_need_search=will_need_search, ctx=ctx: start_hook(ctx, info, incomplete, will_need_search),
                               'paths': {'home': f'./dl/{server_id}'}}) as ydl:
                     try:
-                         await ctx.send('Collecting data')
                          info = ydl.extract_info(query, download=False)
                     except yt_dlp.utils.DownloadError as err:
                          await notify_about_failure(ctx, err)
