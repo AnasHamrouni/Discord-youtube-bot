@@ -1,17 +1,13 @@
-from yt_dlp import YoutubeDL
+import subprocess
 
-# Define options, including the path to your cookies file
-ytdl_opts = {
-    'format': 'best',
-    'verbose': True,  # To enable detailed logs (equivalent to `-vU`)
-    'cookies': './cookies.txt',  # Ensure the path matches your command line
-    'debug': True,
-}
+# Define the command
+command = 'yt-dlp --cookies ./cookies.txt https://www.youtube.com/watch?v=4w9iDLuvSOQ -vU'
 
-# Use the options with YoutubeDL
-with YoutubeDL(ytdl_opts) as ydl:
-    # Extract video information without downloading
-    info = ydl.extract_info("https://www.youtube.com/watch?v=4w9iDLuvSOQ", download=False)
-
-    # Print the extracted info (for testing)
-    print(info)
+# Execute the command
+try:
+    result = subprocess.run(command, shell=True, check=True, text=True)
+    print("Command executed successfully!")
+    print("Output:", result.stdout)
+except subprocess.CalledProcessError as e:
+    print(f"Error executing command: {e}")
+    print("Error Output:", e.stderr)
