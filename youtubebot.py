@@ -267,6 +267,7 @@ async def play(ctx: commands.Context, *args):
 
      ytdl_format_options = {'format': YTDL_FORMAT,
                          'source_address': '0.0.0.0',
+                         'quiet': True,
                          'default_search': 'ytsearch',
                          'outtmpl': '%(id)s.%(ext)s',
                          'noplaylist': False,
