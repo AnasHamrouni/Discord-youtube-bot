@@ -1,15 +1,16 @@
-import yt_dlp
+from yt_dlp import YoutubeDL
 
-# Define the options
+# Define options, including the path to your cookies file
 ytdl_opts = {
     'format': 'best',
-    'noplaylist': True,
-    'cookies' : '/home/ubuntu/omkelthoum/cookies.txt',
-    'verbose': True,
+    'verbose': True,  # To enable detailed logs (equivalent to `-vU`)
+    'cookies': './cookies.txt',  # Ensure the path matches your command line
 }
 
-# Pass the options to YoutubeDL
-with yt_dlp.YoutubeDL(ytdl_opts) as ydl:
-    # Extract video information
-    info = ydl.extract_info("https://www.youtube.com/watch?v=us8gGsb9ZV8", download=False)
+# Use the options with YoutubeDL
+with YoutubeDL(ytdl_opts) as ydl:
+    # Extract video information without downloading
+    info = ydl.extract_info("https://www.youtube.com/watch?v=4w9iDLuvSOQ", download=False)
+
+    # Print the extracted info (for testing)
     print(info)
