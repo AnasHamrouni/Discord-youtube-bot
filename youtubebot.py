@@ -2,6 +2,7 @@
 import re
 import discord
 from discord.ext import commands
+import subprocess
 import yt_dlp
 import urllib
 import asyncio
@@ -341,8 +342,10 @@ async def play(ctx: commands.Context, *args):
                          info = info['entries'][0]
                     # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
                     await ctx.send('adding ' + f'`{info["title"]}` to the queue')
-                    try:
-                         ydl.download([query])
+                    try: 
+                         command = f"""yt-dlp --format 'best' --source-address '0.0.0.0' --default-search 'ytsearch' --output '%(id)s.%(ext)s' --no-playlist --playlist-end 10 --cookies './cookies.txt' --paths 'home=./dl/{server_id}'"""
+                         result = subprocess.run(command, shell=True, check=True, text=True)
+                         #ydl.download([query])
                     except yt_dlp.utils.DownloadError as err:
                          await notify_about_failure(ctx, err)
                          return
