@@ -5,6 +5,7 @@ ytdl_opts = {
     'format': 'best',
     'verbose': True,  # To enable detailed logs (equivalent to `-vU`)
     'cookies': './cookies.txt',  # Ensure the path matches your command line
+    'debug': True,
 }
 
 # Use the options with YoutubeDL
