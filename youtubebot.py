@@ -332,13 +332,16 @@ async def play(ctx: commands.Context, *args):
                               # TODO fix downloading multiple times
                               await play(ctx, f"https://youtu.be/{entry['id']}")
                else:
-                    try:
-                         await ctx.send('strating data collector')
-                         info = ydl.extract_info(query, download=False)
-                         await ctx.send('Got data')
-                    except yt_dlp.utils.DownloadError as err:
-                         await notify_about_failure(ctx, err)
-                         return
+                    await ctx.send('strating data collector')
+                    info = ydl.extract_info(query, download=False)
+                    await ctx.send('Got data')
+                    # try:
+                    #      await ctx.send('strating data collector')
+                    #      info = ydl.extract_info(query, download=False)
+                    #      await ctx.send('Got data')
+                    # except yt_dlp.utils.DownloadError as err:
+                    #      await notify_about_failure(ctx, err)
+                    #      return
 
                     if 'entries' in info:
                          info = info['entries'][0]
