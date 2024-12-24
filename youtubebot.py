@@ -272,12 +272,13 @@ async def play(ctx: commands.Context, *args):
                          'noplaylist': False,
                          'playlistend': MAX_SONGS,
                          'cookies' : '/home/ubuntu/omkelthoum/cookies.txt',
+                         'verbose': True,
+
                          # 'progress_hooks': [lambda info, ctx=ctx: video_progress_hook(ctx, info)],
                          # 'match_filter': lambda info, incomplete, will_need_search=will_need_search, ctx=ctx: start_hook(ctx, info, incomplete, will_need_search),
                          'paths': {'home': f'./dl/{server_id}'}}
 
      ydl = yt_dlp.YoutubeDL(ytdl_format_options)
-
      # source address as 0.0.0.0 to force ipv4 because ipv6 breaks it for some reason
      # this is equivalent to --force-ipv4 (line 312 of https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/options.py)
      #await ctx.send(f'looking for `{query}`...')
