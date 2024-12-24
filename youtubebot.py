@@ -271,7 +271,7 @@ async def play(ctx: commands.Context, *args):
                          'outtmpl': '%(id)s.%(ext)s',
                          'noplaylist': False,
                          'playlistend': MAX_SONGS,
-                         'cookiefile ' : '/home/ubuntu/omkelthoum/cookies.txt',
+                         'cookiefile ' : './cookies.txt',
                          'verbose': True,
                          
                          # 'progress_hooks': [lambda info, ctx=ctx: video_progress_hook(ctx, info)],
