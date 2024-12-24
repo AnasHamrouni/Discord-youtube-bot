@@ -278,80 +278,80 @@ async def play(ctx: commands.Context, *args):
                          # 'match_filter': lambda info, incomplete, will_need_search=will_need_search, ctx=ctx: start_hook(ctx, info, incomplete, will_need_search),
                          'paths': {'home': f'./dl/{server_id}'}}
 
-     ydl = yt_dlp.YoutubeDL(ytdl_format_options)
-     # source address as 0.0.0.0 to force ipv4 because ipv6 breaks it for some reason
-     # this is equivalent to --force-ipv4 (line 312 of https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/options.py)
-     #await ctx.send(f'looking for `{query}`...')
-     if "spotify" in query:
-          if "track" in query:
-               # Extract the track ID from the URL
-               track_id = query.split("/")[-1].split("?")[0]
-               # Fetch the track's details
-               track = spoti_api.track(track_id)
-               # Print the track's name
-               artists = [artist['name'] for artist in track['artists']]
-               song_search_query = ', '.join(artists) +" "+ track['name']
-               await play(ctx, song_search_query)
-               return
-          else:
-               playlist_id = query.split("/")[-1].split("?")[0]
-               # Fetch the playlist's details
-               playlist = spoti_api.playlist_tracks(playlist_id)
-
-               # Iterate through the tracks in the playlist
-               for item in playlist['items'][:MAX_SONGS]:
-                    track = item['track']
+     with yt_dlp.YoutubeDL(ytdl_format_options) as ydl:
+          # source address as 0.0.0.0 to force ipv4 because ipv6 breaks it for some reason
+          # this is equivalent to --force-ipv4 (line 312 of https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/options.py)
+          #await ctx.send(f'looking for `{query}`...')
+          if "spotify" in query:
+               if "track" in query:
+                    # Extract the track ID from the URL
+                    track_id = query.split("/")[-1].split("?")[0]
+                    # Fetch the track's details
+                    track = spoti_api.track(track_id)
+                    # Print the track's name
                     artists = [artist['name'] for artist in track['artists']]
-                    song_search_query = ', '.join(artists) + " " + track['name']
-
-                    # Enqueue or play each track
-                    # Note: Depending on your bot's design, you might need to enqueue these tracks
-                    # or play them directly. The following line is a placeholder to indicate where
-                    # you would handle each track.
+                    song_search_query = ', '.join(artists) +" "+ track['name']
                     await play(ctx, song_search_query)
-               return
-
-     else:
-          if "list" in query:
-               try:
-                    info = ydl.extract_info(query, download=False)
-               except yt_dlp.utils.DownloadError as err:
-                    await notify_about_failure(ctx, err)
                     return
-               if 'entries' in info:
-               # Limit the number of entries to MAX_SONGS to handle playlists larger than MAX_SONGS
-                    for i in range(MAX_SONGS):
-                         entry = info['entries'][i]
-                         # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
-                         # await ctx.send('downloading ' + (f'https://youtu.be/{entry["id"]}' if will_need_search else f'`{entry["title"]}`'))
-                         # download the query as a list of songs (checks if the song has been already downloaded)
-                         # TODO fix downloading multiple times
-                         await play(ctx, f"https://youtu.be/{entry['id']}")
+               else:
+                    playlist_id = query.split("/")[-1].split("?")[0]
+                    # Fetch the playlist's details
+                    playlist = spoti_api.playlist_tracks(playlist_id)
+
+                    # Iterate through the tracks in the playlist
+                    for item in playlist['items'][:MAX_SONGS]:
+                         track = item['track']
+                         artists = [artist['name'] for artist in track['artists']]
+                         song_search_query = ', '.join(artists) + " " + track['name']
+
+                         # Enqueue or play each track
+                         # Note: Depending on your bot's design, you might need to enqueue these tracks
+                         # or play them directly. The following line is a placeholder to indicate where
+                         # you would handle each track.
+                         await play(ctx, song_search_query)
+                    return
+
           else:
-               try:
-                    info = ydl.extract_info(query, download=False)
-               except yt_dlp.utils.DownloadError as err:
-                    await notify_about_failure(ctx, err)
-                    return
+               if "list" in query:
+                    try:
+                         info = ydl.extract_info(query, download=False)
+                    except yt_dlp.utils.DownloadError as err:
+                         await notify_about_failure(ctx, err)
+                         return
+                    if 'entries' in info:
+                    # Limit the number of entries to MAX_SONGS to handle playlists larger than MAX_SONGS
+                         for i in range(MAX_SONGS):
+                              entry = info['entries'][i]
+                              # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
+                              # await ctx.send('downloading ' + (f'https://youtu.be/{entry["id"]}' if will_need_search else f'`{entry["title"]}`'))
+                              # download the query as a list of songs (checks if the song has been already downloaded)
+                              # TODO fix downloading multiple times
+                              await play(ctx, f"https://youtu.be/{entry['id']}")
+               else:
+                    try:
+                         info = ydl.extract_info(query, download=False)
+                    except yt_dlp.utils.DownloadError as err:
+                         await notify_about_failure(ctx, err)
+                         return
 
-               if 'entries' in info:
-                    info = info['entries'][0]
-               # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
-               await ctx.send('adding ' + f'`{info["title"]}` to the queue')
-               try:
-                    ydl.download([query])
-               except yt_dlp.utils.DownloadError as err:
-                    await notify_about_failure(ctx, err)
-                    return
+                    if 'entries' in info:
+                         info = info['entries'][0]
+                    # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
+                    await ctx.send('adding ' + f'`{info["title"]}` to the queue')
+                    try:
+                         ydl.download([query])
+                    except yt_dlp.utils.DownloadError as err:
+                         await notify_about_failure(ctx, err)
+                         return
 
-               path = f'./dl/{server_id}/{info["id"]}.{info["ext"]}'
-               try: queues[server_id].append((path, info))
-               except KeyError: # first in queue
-                    queues[server_id] = [(path, info)]
-                    try: connection = await voice_state.channel.connect()
-                    except discord.ClientException: connection = get_voice_client_from_channel_id(voice_state.channel.id)
-                    connection.play(discord.FFmpegOpusAudio(path), after=lambda error=None, connection=connection, server_id=server_id:
-                                                                      after_track(error, connection, server_id))
+                    path = f'./dl/{server_id}/{info["id"]}.{info["ext"]}'
+                    try: queues[server_id].append((path, info))
+                    except KeyError: # first in queue
+                         queues[server_id] = [(path, info)]
+                         try: connection = await voice_state.channel.connect()
+                         except discord.ClientException: connection = get_voice_client_from_channel_id(voice_state.channel.id)
+                         connection.play(discord.FFmpegOpusAudio(path), after=lambda error=None, connection=connection, server_id=server_id:
+                                                                           after_track(error, connection, server_id))
      
 
 
