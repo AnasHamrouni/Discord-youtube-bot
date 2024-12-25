@@ -331,9 +331,7 @@ async def play(ctx: commands.Context, *args):
                               await play(ctx, f"https://youtu.be/{entry['id']}")
                else:
                     try:
-                         await ctx.send('strating data collector')
                          info = ydl.extract_info(query, download=False)
-                         await ctx.send('Got data')
                     except yt_dlp.utils.DownloadError as err:
                          await notify_about_failure(ctx, err)
                          return
