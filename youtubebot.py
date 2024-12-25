@@ -26,8 +26,6 @@ BOT_REPORT_DL_ERROR = os.getenv('BOT_REPORT_DL_ERROR', '0').lower() in ('true', 
 unix_timestamp = int(time.time())
 MAX_SONGS = 10
 
-cookies_path = os.path.abspath("./cookies.txt")  # Make sure the path is correct
-
 # Able to reset 7daystodie server
 daystodieCommandWhitelist = [322600779078959125,341156433347477504,1138604718365606051,191991730206146562,366585211917697036]
 # Oussama troll texts
@@ -275,7 +273,7 @@ async def play(ctx: commands.Context, *args):
                          'outtmpl': '%(id)s.%(ext)s',
                          'noplaylist': False,
                          'playlistend': MAX_SONGS,
-                         'cookiefile ' : cookies_path,
+                         'cookiefile' : './cookies.txt',
                          'verbose': True,
                          
                          # 'progress_hooks': [lambda info, ctx=ctx: video_progress_hook(ctx, info)],
