@@ -330,25 +330,20 @@ async def play(ctx: commands.Context, *args):
                               # TODO fix downloading multiple times
                               await play(ctx, f"https://youtu.be/{entry['id']}")
                else:
-                    await ctx.send('strating data collector')
-                    info = ydl.extract_info(query, download=False)
-                    await ctx.send('Got data')
-                    # try:
-                    #      await ctx.send('strating data collector')
-                    #      info = ydl.extract_info(query, download=False)
-                    #      await ctx.send('Got data')
-                    # except yt_dlp.utils.DownloadError as err:
-                    #      await notify_about_failure(ctx, err)
-                    #      return
+                    try:
+                         await ctx.send('strating data collector')
+                         info = ydl.extract_info(query, download=False)
+                         await ctx.send('Got data')
+                    except yt_dlp.utils.DownloadError as err:
+                         await notify_about_failure(ctx, err)
+                         return
 
                     if 'entries' in info:
                          info = info['entries'][0]
                     # send link if it was a search, otherwise send title as sending link again would clutter chat with previews
                     await ctx.send('adding ' + f'`{info["title"]}` to the queue')
                     try: 
-                         command = f"""yt-dlp --format 'best' --source-address '0.0.0.0' --default-search 'ytsearch' --output '%(id)s.%(ext)s' --no-playlist --playlist-end 10 --cookies './cookies.txt' --paths 'home=./dl/{server_id}'"""
-                         result = subprocess.run(command, shell=True, check=True, text=True)
-                         #ydl.download([query])
+                         ydl.download([query])
                     except yt_dlp.utils.DownloadError as err:
                          await notify_about_failure(ctx, err)
                          return
