@@ -24,7 +24,7 @@ PRINT_STACK_TRACE = os.getenv('PRINT_STACK_TRACE', '1').lower() in ('true', 't',
 BOT_REPORT_COMMAND_NOT_FOUND = os.getenv('BOT_REPORT_COMMAND_NOT_FOUND', '1').lower() in ('true', 't', '1')
 BOT_REPORT_DL_ERROR = os.getenv('BOT_REPORT_DL_ERROR', '0').lower() in ('true', 't', '1')
 unix_timestamp = int(time.time())
-MAX_SONGS = 10
+MAX_SONGS = 5
 
 # Able to reset 7daystodie server
 daystodieCommandWhitelist = [322600779078959125,341156433347477504,1138604718365606051,191991730206146562,366585211917697036]
